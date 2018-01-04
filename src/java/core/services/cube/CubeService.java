@@ -13,43 +13,41 @@ import core.models.Cube;
  */
 public class CubeService {
 
-    public static long sum;
-    public static Cube cube;
-    public static int[] W;
+    private static long sum;
+    public static Cube cube = new Cube();
 
     public CubeService() {
-        this.cube = new Cube();
+        cube = new Cube();
     }
 
     public static Cube GetCube() {
         return cube;
     }
 
-    public static void CreateCube(Integer N) {
+    public static void CreateCube(int N) {
         cube = new Cube();
 
-        int[] n = new int[N];
+        cube.setW(N);
+        cube.setX(N);
+        cube.setY(N);
+        cube.setZ(N);
 
-        W = n;
-        cube.setX(n);
-        cube.setY(n);
-        cube.setZ(n);
     }
 
-    public static void UpdateCube(Integer count, Integer x, Integer y, Integer z, Integer w) {
+    public static void UpdateCube(int count, int x, int y, int z, int w) {
         cube.x[count] = x - 1;
         cube.y[count] = y - 1;
         cube.z[count] = z - 1;
-        W[count] = w;
+        cube.w[count] = w;
 
         for (int k = 0; k < count; k++) {
             if (cube.x[k] == cube.x[count] && cube.y[k] == cube.y[count] && cube.z[k] == cube.z[count]) {
-                W[k] = 0;
+                cube.w[k] = 0;
             }
         }
     }
 
-    public static void QueryCube(Integer count, Integer xOne, Integer yOne, Integer zOne, Integer xTwo, Integer yTwo, Integer zTwo) {
+    public static void QueryCube(int count, int xOne, int yOne, int zOne, int xTwo, int yTwo, int zTwo) {
 
         sum = 0;
         xOne = xOne - 1;
@@ -61,11 +59,11 @@ public class CubeService {
 
         for (int a = 0; a < count; a++) {
             if (cube.x[a] >= xOne && cube.y[a] >= yOne && cube.z[a] >= zOne && cube.x[a] <= xTwo && cube.y[a] <= yTwo && cube.z[a] <= zTwo) {
-                sum += W[a];
+                sum += cube.w[a];
             }
         }
     }
-    
+
     public static long GetSum() {
         return sum;
     }

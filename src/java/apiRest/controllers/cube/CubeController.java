@@ -19,14 +19,6 @@ import javax.ws.rs.PathParam;
  */
 @Path("Cube")
 public class CubeController {
-
-    @GET
-    @Path("Test/x/{x}/y/{y}")
-    public String test(@PathParam("x") Integer x, @PathParam("y") Integer y) {
-
-        return String.valueOf(x * y);
-    }
-
     @GET
     @Path("GetCube")
     public Cube getCube() {
@@ -35,19 +27,19 @@ public class CubeController {
 
     @POST
     @Path("CreateCube/n/{n}")
-    public void createCube(@PathParam("n") Integer n) {
+    public void createCube(@PathParam("n") int n) {
         CubeService.CreateCube(n);
     }
 
     @PUT
     @Path("UpdateCube/count/{count}/x/{x}/y/{y}/z/{z}/w/{w}")
-    public void updateCube(@PathParam("count") Integer count, @PathParam("x") Integer x, @PathParam("y") Integer y, @PathParam("z") Integer z, @PathParam("w") Integer w) {
+    public void updateCube(@PathParam("count") int count, @PathParam("x") int x, @PathParam("y") int y, @PathParam("z") int z, @PathParam("w") int w) {
         CubeService.UpdateCube(count, x, y, z, w);
     }   
     
     @POST
     @Path("QueryCube/count/{count}/xOne/{xOne}/yOne/{yOne}/zOne/{zOne}/xTwo/{xTwo}/yTwo/{yTwo}/zTwo/{zTwo}")
-    public void queryCube(@PathParam("count") Integer count, @PathParam("xOne") Integer xOne, @PathParam("yOne") Integer yOne, @PathParam("zOne") Integer zOne, @PathParam("xTwo") Integer xTwo, @PathParam("yTwo") Integer yTwo, @PathParam("zTwo") Integer zTwo) {
+    public void queryCube(@PathParam("count") int count, @PathParam("xOne") int xOne, @PathParam("yOne") int yOne, @PathParam("zOne") int zOne, @PathParam("xTwo") int xTwo, @PathParam("yTwo") int yTwo, @PathParam("zTwo") int zTwo) {
         CubeService.QueryCube(count, xOne, yOne, zOne, xTwo, yTwo, zTwo);
     } 
     
