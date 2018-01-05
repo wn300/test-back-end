@@ -6,11 +6,287 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Test Back End</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="index.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+        <script src="Factory/cubeFactory.js" type="text/javascript"></script>
+
+        <script type="application/javascript">
+            function clickStartCases() {
+                var divNumberCases = document.getElementById("number-test-cases");
+                var numberCases = divNumberCases.value;                
+                
+                if(numberCases > 50 || numberCases < 1 || numberCases == null){
+                    alert("The number of cases must be between 1 and 50");
+                    return false;
+                }
+                
+                var container =  document.getElementById("container-general");
+                var btnStart = document.getElementById("btn-start");
+                var btnNew = document.getElementById("btn-new");
+        
+                divNumberCases.setAttribute("disabled", "disabled");
+                btnStart.className = "hide";
+                btnNew.className = "btn btn-danger btn-block btn-sm show";
+                
+                var disabled = "";
+                
+                for (var i = 0; i < numberCases; i++) {
+                    var div = document.createElement('div');
+                    div.className = "row case";
+                    div.setAttribute("id", "case" + i);
+                    
+                    if(i != 0){
+                        disabled = "disabled"
+                    } 
+                    
+                    div.innerHTML = '<div class="col-12 col-md-1">' +
+                                        '<div class="form-group row">' +
+                                            '<h5>'+ (parseFloat(i) + 1) +' Case</h5>' +                                                                  
+                                        '</div>' +             
+                                   '</div>' +                             
+                                    '<div class="col-12 col-md-4">' +
+                                        '<div class="form-group row">' +
+                                            '<label class="col-6 col-form-label">Size matrix:</label>' +
+                                            '<div class="col-6">' +
+                                                '<input type="number" class="form-control form-control-sm text-center" id="size-matrix" ' + disabled + '>' +
+                                            '</div>' +                       
+                                        '</div>' +             
+                                    '</div>' +  
+                                    '<div class="col-12 col-md-4">' +
+                                        '<div class="form-group row">' +
+                                            '<label for="number-test-cases" class="col-6 col-form-label">Number operations:</label>' +
+                                            '<div class="col-6">' +
+                                                '<input type="number" class="form-control form-control-sm text-center" id="number-operations" ' + disabled + '>' +
+                                            '</div>' +                      
+                                        '</div>' +                 
+                                    '</div>' +  
+                                    '<div class="col-12 col-md-2">' +
+                                        '<button class="btn btn-primary btn-block btn-sm" onclick="clickStartOperations(case' + i + ')" ' + disabled + '>' +
+                                            'Start' +
+                                        '</button>' +                     
+                                    '</div>'; 
+
+                   container.appendChild(div); 
+                }
+            }
+            
+            function clickStartOperations(numberCase) {
+                var row = document.getElementById(numberCase.id);
+                var size = row.children[1].getElementsByTagName("input")[0].value;
+                var operations = row.children[2].getElementsByTagName("input")[0].value;
+                
+                if(size > 100 || size < 1 || size == null){
+                    alert("The size of the matrix must be between 1 and 100");
+                    return false;
+                }
+                
+                if(operations > 1000 || operations < 1 || operations == null){
+                    alert("The operations must be between 1 and 1000");
+                    return false;
+                }
+                
+                createCube(size)
+                .then(res => {
+                    if(res.status == 204 || res.status == 200){
+                        row.getElementsByTagName('input')[0].setAttribute("disabled", "disabled");
+                        row.getElementsByTagName('input')[1].setAttribute("disabled", "disabled");
+                        row.getElementsByTagName('button')[0].className = "hide";
+
+                        var container =  document.getElementById(numberCase.id);
+                        var disabled = "";
+
+                        for (var i = 0; i < operations; i++) {
+                            var div = document.createElement('div');
+                            div.className = "col-12";
+                            div.setAttribute("id", "operation" + i);
+
+                            if(i != 0){
+                                disabled = "disabled"
+                            } 
+
+                             div.innerHTML ='<div class="row">'+                                    
+                                                '<div class="col-12">' +
+                                                    '<div class="row case">' +
+                                                        '<div class="col-12 col-md-3">' +
+                                                            '<label>' + (parseFloat(i) + 1) + ' Select operation:</label>' +
+                                                        '</div>' +
+                                                        '<div class="col-12 col-md-1">' +
+                                                            '<button class="btn btn-success btn-block btn-sm" ' + disabled + ' onclick="clickUpdate(operation' + i + ')">' +
+                                                                'Update' +
+                                                            '</button>' +
+                                                        '</div>' +
+                                                        '<div class="col-12 col-md-1">' +
+                                                            '<button class="btn btn-info btn-block btn-sm" ' + disabled + ' onclick="clickQuery(operation' + i + ')">' +
+                                                                'Query' +
+                                                            '</button>' +
+                                                        '</div>' +
+                                                    '</div>' +
+                                                    '<div class="row case hide">' +
+                                                        '<div class="col-12 col-md-2">' +
+                                                            '<label>' + (parseFloat(i) + 1) + ' Update</label>' +
+                                                        '</div>' +
+                                                        '<div class="col-12 col-md-9">' +
+                                                            '<div class="form-group row">' +
+                                                                '<label for="x" class="col-1 col-form-label">X:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="x">' +
+                                                                '</div>' +
+                                                                '<label for="y" class="col-1 col-form-label">Y:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="y">' +
+                                                                '</div>' + 
+                                                                '<label for="z" class="col-1 col-form-label">Z:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="z">' +
+                                                                '</div>' +  
+                                                                '<label for="w" class="col-1 col-form-label">W:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="w">' +
+                                                                '</div>' + 
+                                                            '</div>' +
+                                                        '</div>' +
+                                                        '<div class="col-12 col-md-1">' +
+                                                            '<button class="btn btn-secondary btn-block btn-sm" onclick="clickSaveUpdate(operation' + i + ', ' + numberCase.id + ')">' +
+                                                                'Save' +
+                                                            '</button>' + 
+                                                        '</div>' +
+                                                    '</div>' +                                       
+                                                    '<div class="row case align-items-center hide">' +
+                                                        '<div class="col-12 col-md-2">' +
+                                                            '<label>' + (parseFloat(i) + 1) + ' Query</label>' +
+                                                        '</div>' + 
+                                                        '<div class="col-12 col-md-9">' +
+                                                            '<div class="form-group row align-items-center">' +
+                                                                '<label for="x-one" class="col-1 col-form-label">X1:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="x-one">' +
+                                                                '</div>' + 
+                                                                '<label for="y-one" class="col-1 col-form-label">Y1:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="y-one">' +
+                                                                '</div>' + 
+                                                                '<label for="z-one" class="col-1 col-form-label">Z1:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="z-one">' +
+                                                                '</div>' + 
+                                                                '<label for="z-one" class="col-1 col-form-label">X2:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="x-one">' +
+                                                                '</div>' + 
+                                                                '<label for="y-one" class="col-1 col-form-label">Y2:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="y-one">' +
+                                                                '</div>' + 
+                                                                '<label for="z-one" class="col-1 col-form-label">Z2:</label>' +
+                                                                '<div class="col-2">' +
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="z-one">' +
+                                                                '</div>' + 
+                                                                '<label for="z-one" class="col-1 col-form-label">Result:</label>' +
+                                                                '<div class="col-5">' + 
+                                                                    '<input type="number" class="form-control form-control-sm text-center" id="result" disabled>' +
+                                                                '</div>' + 
+                                                            '</div>' +     
+                                                        '</div>' +
+                                                        '<div class="col-12 col-md-1">' +
+                                                            '<button class="btn btn-secondary btn-block btn-sm" onclick="clickSaveQuery(operation' + i + ')">' +
+                                                                '=' +
+                                                            '</button>' + 
+                                                        '</div>' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>'; 
+
+                            container.appendChild(div); 
+                        }
+                    }                
+                });
+            }
+            
+            function clickNewCases() {
+                window.location.href = "http://localhost:8080/test-back-end/";
+            }
+            
+            function clickUpdate(operation){
+                var row = document.getElementById(operation.id);
+                 row.children[0].children[0].children[0].className = "hide";
+                row.children[0].children[0].children[1].className = "row case";
+            }
+            
+            function clickQuery(operation){
+                var row = document.getElementById(operation.id);
+                row.children[0].children[0].children[0].className = "hide";
+                row.children[0].children[0].children[2].className = "row case align-items-center ";
+            }
+            
+            function clickSaveUpdate(operation, numberCase){
+                var x, y, z, w;
+                var row = document.getElementById(operation.id);
+                var inputs = row.children[0].children[0].children[1].children[1].getElementsByTagName('input');
+                x = inputs[0].value;
+                y = inputs[1].value;
+                z = inputs[2].value;
+                w = inputs[3].value;
+                
+                updateCube(0, x, y ,z, w)
+                .then(res => 
+                {
+                    if(res.status == 204 || res.status == 200){  
+                        var count = numberCase.children.length - 4;
+                        
+                        for (var i = 0; i < count; i++) {
+                            if(i == 0){
+                                row.getElementsByTagName("button")[2].className = "hide";
+                                inputs[0].setAttribute("disabled", "disabled");
+                                inputs[1].setAttribute("disabled", "disabled");
+                                inputs[2].setAttribute("disabled", "disabled");
+                                inputs[3].setAttribute("disabled", "disabled");
+                                row.id = '';
+                            } else {
+                                if(numberCase.children[4 + i].id != ''){
+                                    numberCase.children[4 + i].getElementsByTagName("button")[0].disabled = false;
+                                    numberCase.children[4 + i].getElementsByTagName("button")[1].disabled = false
+                                    return false
+                                }                                
+                            }
+
+                        }
+                    }
+                });
+                
+            }
+            function clickSaveQuery(operation){
+                var row = document.getElementById(operation.id);
+            }
+            
+            
+        </script>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div id="container-general" class="container">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="form-group row">
+                        <label for="number-test-cases" class="col-6 col-form-label">Number of test-cases:</label>
+                        <div class="col-6">
+                            <input type="number" class="form-control form-control-sm text-center" id="number-test-cases"> 
+                        </div>                        
+                    </div>                  
+                </div>
+                <div class="col-12 col-md-2">
+                    <button id="btn-start" class="btn btn-primary btn-block btn-sm" onclick="clickStartCases()">
+                        Start
+                    </button>  
+                    <button id="btn-new" class="btn btn-danger btn-block btn-sm hide" onclick="clickNewCases()">
+                        New
+                    </button>  
+                </div>
+            </div>
+        </div>
     </body>
 </html>

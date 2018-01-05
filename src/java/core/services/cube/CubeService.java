@@ -48,8 +48,8 @@ public class CubeService {
     }
 
     public static void QueryCube(int count, int xOne, int yOne, int zOne, int xTwo, int yTwo, int zTwo) {
-
         sum = 0;
+        
         xOne = xOne - 1;
         yOne = yOne - 1;
         zOne = zOne - 1;
