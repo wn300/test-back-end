@@ -194,7 +194,7 @@ and open the template in the editor.
                                                             '</div>' +     
                                                         '</div>' +
                                                         '<div class="col-12 col-md-1">' +
-                                                            '<button class="btn btn-secondary btn-block btn-sm" onclick="clickSaveQuery(operation' + i + ')">' +
+                                                            '<button class="btn btn-secondary btn-block btn-sm" onclick="clickSaveQuery(operation' + i + ', ' + numberCase.id + ')">' +
                                                                 '=' +
                                                             '</button>' + 
                                                         '</div>' +
@@ -204,7 +204,9 @@ and open the template in the editor.
 
                             container.appendChild(div); 
                         }
-                    }                
+                    } else {
+                        alert("Error " + res.status);
+                    }               
                 });
             }
             
@@ -233,11 +235,13 @@ and open the template in the editor.
                 z = inputs[2].value;
                 w = inputs[3].value;
                 
-                updateCube(0, x, y ,z, w)
+                updateCube(x, y ,z, w)
                 .then(res => 
                 {
                     if(res.status == 204 || res.status == 200){  
                         var count = numberCase.children.length - 4;
+                        
+                         var general = document.getElementById("container-general");
                         
                         for (var i = 0; i < count; i++) {
                             if(i == 0){
@@ -250,18 +254,106 @@ and open the template in the editor.
                             } else {
                                 if(numberCase.children[4 + i].id != ''){
                                     numberCase.children[4 + i].getElementsByTagName("button")[0].disabled = false;
-                                    numberCase.children[4 + i].getElementsByTagName("button")[1].disabled = false
-                                    return false
-                                }                                
+                                    numberCase.children[4 + i].getElementsByTagName("button")[1].disabled = false; 
+                                    return false;
+                                }else {
+                                    if(i == (count - 1)){                                       
+                                       var countCase = general.children.length;    
+                                       
+                                        for (var j = 0; j < countCase;j++) {
+                                            if (general.children[j].id != "" ) {
+                                                general.children[j].id = "";
+                                                j = countCase;
+                                            }                                            
+                                        }
+                                        
+                                        for (var j = 0; j < countCase; j++) {
+                                            if(general.children[j].id != ""){
+                                                general.children[j].getElementsByTagName("button")[0].disabled = false;
+                                                general.children[j].getElementsByTagName("input")[0].disabled = false;
+                                                general.children[j].getElementsByTagName("input")[1].disabled = false;
+                                                return false
+                                            }
+                                        }
+                                    }                                    
+                                }
+                                
                             }
-
-                        }
-                    }
-                });
-                
+                        }                        
+                    } else {
+                        alert("Error " + res.status);
+                    } 
+                });                
             }
-            function clickSaveQuery(operation){
+            
+            function clickSaveQuery(operation, numberCase){
                 var row = document.getElementById(operation.id);
+                var xOne, yOne, zOne, xTwo, yTwo, zTwo;
+                
+                var inputs = row.children[0].children[0].children[2].children[1].getElementsByTagName('input');
+                xOne = inputs[0].value;
+                yOne = inputs[1].value;
+                zOne = inputs[2].value;
+                xTwo = inputs[3].value;
+                yTwo = inputs[4].value;
+                zTwo = inputs[5].value;
+                
+                queryCube(xOne, yOne, zOne, xTwo, yTwo, zTwo)
+                .then(res => 
+                {
+                    if(res.status == 204 || res.status == 200){ 
+                        
+                         getSum()
+                        .then(result =>  result.json())
+                        .then(data => {
+                            inputs[6].value = data;
+
+                            var count = numberCase.children.length - 4;
+                            var general = document.getElementById("container-general");
+
+                            for (var i = 0; i < count; i++) {                            
+                                if(i == 0){
+                                    row.getElementsByTagName("button")[3].className = "hide";
+                                    inputs[0].setAttribute("disabled", "disabled");
+                                    inputs[1].setAttribute("disabled", "disabled");
+                                    inputs[2].setAttribute("disabled", "disabled");
+                                    inputs[3].setAttribute("disabled", "disabled");
+                                    inputs[4].setAttribute("disabled", "disabled");
+                                    inputs[5].setAttribute("disabled", "disabled");
+                                    row.id = '';
+                                } else {
+                                    if(numberCase.children[4 + i].id != ''){
+                                        numberCase.children[4 + i].getElementsByTagName("button")[0].disabled = false;
+                                        numberCase.children[4 + i].getElementsByTagName("button")[1].disabled = false;
+                                        return false
+                                    } else {
+                                        if(i == (count - 1)){                                       
+                                           var countCase = general.children.length;    
+
+                                            for (var j = 0; j < countCase;j++) {
+                                                if (general.children[j].id != "" ) {
+                                                    general.children[j].id = "";
+                                                    j = countCase;
+                                                }                                            
+                                            }
+
+                                            for (var j = 0; j < countCase; j++) {
+                                                if(general.children[j].id != ""){
+                                                    general.children[j].getElementsByTagName("button")[0].disabled = false;
+                                                    general.children[j].getElementsByTagName("input")[0].disabled = false;
+                                                    general.children[j].getElementsByTagName("input")[1].disabled = false;
+                                                    return false
+                                                }
+                                            }
+                                        }                                    
+                                    }                               
+                                }
+                            }  
+                        });                       
+                    } else {
+                        alert("Error " + res.status);
+                    } 
+                });
             }
             
             

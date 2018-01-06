@@ -32,15 +32,15 @@ public class CubeController {
     }
 
     @PUT
-    @Path("UpdateCube/count/{count}/x/{x}/y/{y}/z/{z}/w/{w}")
-    public void updateCube(@PathParam("count") int count, @PathParam("x") int x, @PathParam("y") int y, @PathParam("z") int z, @PathParam("w") int w) {
-        CubeService.UpdateCube(count, x, y, z, w);
+    @Path("UpdateCube/x/{x}/y/{y}/z/{z}/w/{w}")
+    public void updateCube(@PathParam("x") int x, @PathParam("y") int y, @PathParam("z") int z, @PathParam("w") int w) {
+        CubeService.UpdateCube(x, y, z, w);
     }   
     
     @POST
-    @Path("QueryCube/count/{count}/xOne/{xOne}/yOne/{yOne}/zOne/{zOne}/xTwo/{xTwo}/yTwo/{yTwo}/zTwo/{zTwo}")
-    public void queryCube(@PathParam("count") int count, @PathParam("xOne") int xOne, @PathParam("yOne") int yOne, @PathParam("zOne") int zOne, @PathParam("xTwo") int xTwo, @PathParam("yTwo") int yTwo, @PathParam("zTwo") int zTwo) {
-        CubeService.QueryCube(count, xOne, yOne, zOne, xTwo, yTwo, zTwo);
+    @Path("QueryCube/xOne/{xOne}/yOne/{yOne}/zOne/{zOne}/xTwo/{xTwo}/yTwo/{yTwo}/zTwo/{zTwo}")
+    public void queryCube(@PathParam("xOne") int xOne, @PathParam("yOne") int yOne, @PathParam("zOne") int zOne, @PathParam("xTwo") int xTwo, @PathParam("yTwo") int yTwo, @PathParam("zTwo") int zTwo) {
+        CubeService.QueryCube(xOne, yOne, zOne, xTwo, yTwo, zTwo);
     } 
     
     @GET

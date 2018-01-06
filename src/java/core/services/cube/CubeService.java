@@ -14,6 +14,7 @@ import core.models.Cube;
 public class CubeService {
 
     private static long sum;
+    private static int count = 0;
     public static Cube cube = new Cube();
 
     public CubeService() {
@@ -34,7 +35,7 @@ public class CubeService {
 
     }
 
-    public static void UpdateCube(int count, int x, int y, int z, int w) {
+    public static void UpdateCube(int x, int y, int z, int w) {
         cube.x[count] = x - 1;
         cube.y[count] = y - 1;
         cube.z[count] = z - 1;
@@ -45,9 +46,10 @@ public class CubeService {
                 cube.w[k] = 0;
             }
         }
+        count ++;
     }
 
-    public static void QueryCube(int count, int xOne, int yOne, int zOne, int xTwo, int yTwo, int zTwo) {
+    public static void QueryCube(int xOne, int yOne, int zOne, int xTwo, int yTwo, int zTwo) {
         sum = 0;
         
         xOne = xOne - 1;
