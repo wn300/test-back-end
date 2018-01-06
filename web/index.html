@@ -205,7 +205,7 @@ and open the template in the editor.
                             container.appendChild(div); 
                         }
                     } else {
-                        alert("Error " + res.status);
+                         alert("Error " + res.status + " - " + res.statusText);
                     }               
                 });
             }
@@ -251,6 +251,26 @@ and open the template in the editor.
                                 inputs[2].setAttribute("disabled", "disabled");
                                 inputs[3].setAttribute("disabled", "disabled");
                                 row.id = '';
+                                
+                                if(i == (count - 1)){                                       
+                                       var countCase = general.children.length;    
+                                       
+                                        for (var j = 0; j < countCase;j++) {
+                                            if (general.children[j].id != "" ) {
+                                                general.children[j].id = "";
+                                                j = countCase;
+                                            }                                            
+                                        }
+                                        
+                                        for (var j = 0; j < countCase; j++) {
+                                            if(general.children[j].id != ""){
+                                                general.children[j].getElementsByTagName("button")[0].disabled = false;
+                                                general.children[j].getElementsByTagName("input")[0].disabled = false;
+                                                general.children[j].getElementsByTagName("input")[1].disabled = false;
+                                                return false
+                                            }
+                                        }
+                                    }      
                             } else {
                                 if(numberCase.children[4 + i].id != ''){
                                     numberCase.children[4 + i].getElementsByTagName("button")[0].disabled = false;
@@ -281,7 +301,7 @@ and open the template in the editor.
                             }
                         }                        
                     } else {
-                        alert("Error " + res.status);
+                         alert("Error " + res.status + " - " + res.statusText);
                     } 
                 });                
             }
@@ -321,6 +341,26 @@ and open the template in the editor.
                                     inputs[4].setAttribute("disabled", "disabled");
                                     inputs[5].setAttribute("disabled", "disabled");
                                     row.id = '';
+                                    
+                                    if(i == (count - 1)){                                       
+                                        var countCase = general.children.length;    
+
+                                         for (var j = 0; j < countCase;j++) {
+                                             if (general.children[j].id != "" ) {
+                                                 general.children[j].id = "";
+                                                 j = countCase;
+                                             }                                            
+                                         }
+
+                                         for (var j = 0; j < countCase; j++) {
+                                             if(general.children[j].id != ""){
+                                                 general.children[j].getElementsByTagName("button")[0].disabled = false;
+                                                 general.children[j].getElementsByTagName("input")[0].disabled = false;
+                                                 general.children[j].getElementsByTagName("input")[1].disabled = false;
+                                                 return false
+                                             }
+                                         }
+                                     }      
                                 } else {
                                     if(numberCase.children[4 + i].id != ''){
                                         numberCase.children[4 + i].getElementsByTagName("button")[0].disabled = false;
@@ -351,7 +391,7 @@ and open the template in the editor.
                             }  
                         });                       
                     } else {
-                        alert("Error " + res.status);
+                        alert("Error " + res.status + " - " + res.statusText);
                     } 
                 });
             }

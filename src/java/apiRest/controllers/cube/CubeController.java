@@ -28,6 +28,7 @@ public class CubeController {
     @POST
     @Path("CreateCube/n/{n}")
     public void createCube(@PathParam("n") int n) {
+        CubeService cube = new CubeService();
         CubeService.CreateCube(n);
     }
 
@@ -48,5 +49,5 @@ public class CubeController {
     public Long getSum() {
         return CubeService.GetSum();
     }
-
+    
 }

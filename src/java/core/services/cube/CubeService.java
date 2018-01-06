@@ -14,11 +14,12 @@ import core.models.Cube;
 public class CubeService {
 
     private static long sum;
-    private static int count = 0;
-    public static Cube cube = new Cube();
+    private static int count;
+    public static Cube cube;
 
     public CubeService() {
         cube = new Cube();
+        count = 0;
     }
 
     public static Cube GetCube() {
@@ -26,13 +27,10 @@ public class CubeService {
     }
 
     public static void CreateCube(int N) {
-        cube = new Cube();
-
         cube.setW(N);
         cube.setX(N);
         cube.setY(N);
         cube.setZ(N);
-
     }
 
     public static void UpdateCube(int x, int y, int z, int w) {
